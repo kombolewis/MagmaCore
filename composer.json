@@ -1,0 +1,41 @@
+{
+    "name": "lava/magmacore",
+    "description": "Simple PHP Framework",
+    "keywords": ["framework","PHP","MVC"],
+    "type": "library",
+    "license": "MIT",
+    "readme": "",
+    "time": "",
+    "support": {
+        "issues": "https://github.com/kombolewis/MagmaCore/issues",
+        "source": "https://github.com/kombolewis/MagmaCore",
+        "wiki": "https://github.com/kombolewis/MagmaCore/wiki"
+    },
+    "authors": [
+        {
+            "name": "kombolewis",
+            "email": "kombolewis@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {
+        "php":"^8.0",
+        "ext-mbstring":"*",
+        "ext-iconv":"*",
+        "ext-pdo":"*",
+        "ext-json":"*",
+        "ext-curl":"*",
+        "ext-simplexml":"*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magma\\":"src/Magma"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magma\\Tests":"tests/"
+        }
+    }
+}
