@@ -20,7 +20,7 @@
     ],
     "minimum-stability": "alpha",
     "require": {
-        "php":"^8.0",
+        "php":"^7.4",
         "ext-mbstring":"*",
         "ext-iconv":"*",
         "ext-pdo":"*",
@@ -30,12 +30,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Magma\\":"src/Magma"
+            "Magma\\":"src/Magma/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Magma\\Tests":"tests/"
+            "Magma\\Tests\\":"tests/"
         }
     }
 }

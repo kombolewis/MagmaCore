@@ -1,6 +1,7 @@
 {
   "namespaces": {
-    "Magma\\":"src/Magma",
+    "Magma":"src/Magma",
     "Magma\\Tests":"tests/"
+
   }
 }
