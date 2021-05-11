@@ -19,6 +19,8 @@ interface QueryBuilderInterface
 
   public function deleteQuery() :string;
 
+  public function searchQuery() :string;
+
   public function rawQuery() :string;
 
 }

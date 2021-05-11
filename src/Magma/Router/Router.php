@@ -2,6 +2,7 @@
 namespace Magma\Router;
 
 use Magma\Router\RouterInterface;
+use Magma\Router\Exception\RouterBadMethodCallException;
 
 class Router implements RouterInterface
 {
@@ -50,7 +51,7 @@ class Router implements RouterInterface
         if(\is_callable($controllerObject, $action)) {
           $controllerObject->$action();
         } else {
-          throw new Exception();
+          throw new RouterBadMethodCallException();
         }
       } else {
         throw new Exception();

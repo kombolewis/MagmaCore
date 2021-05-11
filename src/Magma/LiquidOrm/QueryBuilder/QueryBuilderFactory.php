@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Magma\LiquidOrm\QueryBuilder;
 
 use Magma\LiquidOrm\QueryBuilder\QueryBuilder;
@@ -24,7 +27,7 @@ class QueryBuilderFactory
     if(!$queryBuilderObject instanceof QueryBuilderInterface) {
       throw new QueryBuilderException($queryBuilderString .'is not a valid Query Builder object');
     }
-    return new QueryBuilder;
+    return new queryBuilderObject;
   }
 }
 

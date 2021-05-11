@@ -28,7 +28,7 @@ interface DataMapperInterface
    * 
    * @param array $fields
    * @param boolean $isSearch
-   * @return mixed
+   * @return self
    */
   public function bindParameters(array $fields, bool $isSearch = false) :self;
 
@@ -44,14 +44,14 @@ interface DataMapperInterface
    *
    * @return void
    */
-  public function execute() : void;
+  public function execute();
   
   /**
    * Returns a single database row as an object
    *
    * @return Object
    */
-  public function result() : Object;
+  public function result() : object;
   
   /**
    * Return all the rows within the database as an array 
