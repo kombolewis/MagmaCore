@@ -7,7 +7,7 @@ use Magma\Session\Storage\NativeSessionStorage;
 
 class SessionManager
 {
-  public function initialize() {
+  public static function initialize() {
     return (new SessionFactory())->create('', NativeSessionStorage::class,array());
   }
 }
