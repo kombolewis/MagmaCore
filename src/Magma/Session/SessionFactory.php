@@ -4,6 +4,7 @@ namespace Magma\Session;
 
 use Magma\Session\Session;
 use Magma\Session\SessionInterface;
+use Magma\Session\Storage\SessionStorageInterface;
 use Magma\Session\Exception\SessionStorageInvalidArgumentException;
 
 class SessionFactory

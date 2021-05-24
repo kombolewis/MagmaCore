@@ -13,7 +13,7 @@ interface RouterInterface
    * @param array $param
    * @return void
    */
-  public function add(string $route,array $param = []) : void;
+  public function add(string $route, array $params) : void;
 
 
   /**

@@ -10,15 +10,15 @@ interface SessionInterface
 
   public function setArray(string $key, $value): void;
 
-  public function get(string $key, $default = null): void;
+  public function get(string $key, $default = null);
 
-  public function delete(string $key): void;
+  public function delete(string $key): bool;
 
   public function invalidate(): void;
 
-  public function flush(string $key, $value): void;
+  public function flush(string $key, $value=null);
 
-  public function has(string $key): void;
+  public function has(string $key);
 
 
 

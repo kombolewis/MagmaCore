@@ -1,0 +1,9 @@
+driver:
+  mysql:
+    dsn: mysql:host=localhost;dbname=test;charset=utf8mb4
+    username: kombo
+    password: '123456'
+  pgsql:
+    dsn: pgsql:host=localhost;dbname=test;charset=utf8mb4
+    username: kombo
+    password: '123456'

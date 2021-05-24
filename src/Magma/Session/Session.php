@@ -31,7 +31,7 @@ class Session implements SessionInterface
   public function set(string $key, $value) :void {
     $this->ensureSessionKeyIsValid($key);
     try {
-      $this->storage->setStorage($key,$value);
+      $this->storage->setSession($key,$value);
     } catch (\Throwable $th) {
       throw new SessionException('An exception was thrown in retrieving the key from the session storage '.$th);
     }
@@ -63,7 +63,7 @@ class Session implements SessionInterface
     $this->ensureSessionKeyIsValid($key);
 
     try {
-      $this->storage->deleteSession($key);
+      return $this->storage->deleteSession($key);
     } catch (\Throwable $th) {
       throw new SessionException();
     }
@@ -73,11 +73,11 @@ class Session implements SessionInterface
     $this->storage->invalidate();
   }
 
-  public function flush(string $key, $value) {
+  public function flush(string $key, $value = null) {
     $this->ensureSessionKeyIsValid($key);
 
     try {
-      $this->storage->flush($key,$value);
+      return $this->storage->flush($key,$value);
     } catch (\Throwable $th) {
       throw new SessionException();
     }
@@ -89,10 +89,6 @@ class Session implements SessionInterface
     
     return $this->storage->hasSession();
   }
-
-
-  
-
 
 
 	protected function isSessionKeyValid(string $key) :bool {

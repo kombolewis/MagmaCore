@@ -35,6 +35,9 @@ class DataMapperEnvironmentConfiguration
    */
   public function getDatabaseCredentials(string $driver) : array {
     $connectionArray = [];
+    
+    $this->isCredentialsValid($driver);
+
     foreach($this->credentials as $credential) {
       if(array_key_exists($driver, $credential)) {
         $connectionArray = $credential[$driver];

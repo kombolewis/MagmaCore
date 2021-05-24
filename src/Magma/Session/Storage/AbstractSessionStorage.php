@@ -29,7 +29,7 @@ abstract class AbstractSessionStorage implements SessionStorageInterface
     session_id($sessionID);
   }
 
-  public function getSessionID() : int {
+  public function getSessionID() {
     session_id();
   }
 
@@ -55,8 +55,9 @@ abstract class AbstractSessionStorage implements SessionStorageInterface
 
   public function start() {
     $this->setSessionName($this->options['session_name']);
-    $domain = (isset($this->options['domain']) ?? isset($_SERVER['SERVER_NAME']));
-    $secure = (isset($this->options['secure']) ?? isset($_SERVER['HTTPS']));
+    $domain = (isset($this->options['domain']) ? $this->options['domain'] : isset($_SERVER['SERVER_NAME']));
+    $secure = (isset($this->options['secure']) ? $this->options['secure'] : isset($_SERVER['HTTPS']));
+    
     \session_set_cookie_params(
       $this->options['lifetime'],
       $this->options['path'],

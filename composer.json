@@ -28,11 +28,13 @@
         "ext-curl":"*",
         "ext-simplexml":"*",
         "twig/twig": "^3.3",
-        "symfony/http-foundation": "^5.3@RC"
+        "symfony/http-foundation": "^5.3@RC",
+        "symfony/yaml": "^5.3@RC"
     },
     "autoload": {
         "psr-4": {
-            "Magma\\":"src/Magma/"
+            "Magma\\":"src/Magma/",
+            "App\\":"App/"
         }
     },
     "autoload-dev": {

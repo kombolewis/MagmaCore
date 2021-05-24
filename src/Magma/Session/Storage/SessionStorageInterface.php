@@ -12,7 +12,7 @@ interface SessionStorageInterface
 
   public function setSessionID(string $sessionID) : void;
 
-  public function getSessionID() : int;
+  public function getSessionID();
 
   public function setSession(string $key, $value) :void;
 

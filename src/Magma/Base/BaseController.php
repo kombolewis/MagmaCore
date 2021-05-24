@@ -3,6 +3,8 @@
 namespace Magma\Base;
 
 use Magma\Base\BaseView;
+use Magma\Base\Exception\BaseLogicException;
+use Magma\Base\Exception\BaseBadMethodCallException;
 
 class BaseController
 {
@@ -24,9 +26,26 @@ class BaseController
     return $this->twig->getTemplate($template, $context);
   } 
 
-  
+  public function __call($name, $argument) {
+    $method = $name . 'Action';
+    if(\method_exists($this, $method)) {
+      if($this->before() !== false) {
+        \call_user_func_array([$this, $method],$argument);
+        $this->after();
+      }
+    } else {
+      throw new BaseBadMethodCallException("Method {$method} does not exist in ".get_class($this));
+    }
+  }
+
+  protected function before() {
+
+  }
 
 
+  protected function after() {
+    
+  }
 
 
 }
