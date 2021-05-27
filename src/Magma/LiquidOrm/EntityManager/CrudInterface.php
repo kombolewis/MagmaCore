@@ -33,7 +33,7 @@ interface CrudInterface
    * @param array $fields
    * @return boolean
    */
-  public function create(array $fields) :bool;
+  public function create(array $fields = []) :bool;
 
   /**
    * Returns an array of database rows based on the individual supplied arguments
@@ -80,7 +80,7 @@ interface CrudInterface
    * @param array $conditions
    * @return void
    */
-  public function rawQuery(string $rawQuery, array $conditions = []);
+  public function rawQuery(string $rawQuery, ?array $conditions = []);
 
 
 

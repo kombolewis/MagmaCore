@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Magma\Session;
 
 use Magma\Session\SessionInterface;
-use Magma\Session\Exception\SessionException;
+use Magma\Base\Exception\BaseException;
 use Magma\Session\Storage\SessionStorageInterface;
-use Magma\Session\Exception\SessionInvalidArgumentException;
+use Magma\Base\Exception\BaseInvalidArgumentException;
 
 class Session implements SessionInterface
 {
@@ -20,7 +20,7 @@ class Session implements SessionInterface
   public function __construct(string $sessionName, SessionStorageInterface $storage) {
 
     if($this->isSessionKeyValid($sessionName) == false) {
-      throw new SessionInvalidArgumentException($sessionName.' is not a valid session name');
+      throw new BaseInvalidArgumentException($sessionName.' is not a valid session name');
     }
 
     $this->sessionName = $sessionName;
@@ -33,7 +33,7 @@ class Session implements SessionInterface
     try {
       $this->storage->setSession($key,$value);
     } catch (\Throwable $th) {
-      throw new SessionException('An exception was thrown in retrieving the key from the session storage '.$th);
+      throw new BaseException('An exception was thrown in retrieving the key from the session storage '.$th);
     }
 
   }
@@ -44,7 +44,7 @@ class Session implements SessionInterface
     try {
       $this->storage->setArraySession($key, $value);
     } catch (\Throwable $th) {
-      throw new SessionException('An exception was thrown in retrieving the key from the session storage '.$th);
+      throw new BaseException('An exception was thrown in retrieving the key from the session storage '.$th);
       
     }
   }
@@ -55,7 +55,7 @@ class Session implements SessionInterface
     try {
       return $this->storage->getSession($key,$value);
     } catch (\Throwable $th) {
-      throw new SessionException();
+      throw new BaseException();
     }
   }
 
@@ -65,7 +65,7 @@ class Session implements SessionInterface
     try {
       return $this->storage->deleteSession($key);
     } catch (\Throwable $th) {
-      throw new SessionException();
+      throw new BaseException();
     }
   }
 
@@ -79,7 +79,7 @@ class Session implements SessionInterface
     try {
       return $this->storage->flush($key,$value);
     } catch (\Throwable $th) {
-      throw new SessionException();
+      throw new BaseException();
     }
   }
 
@@ -98,7 +98,7 @@ class Session implements SessionInterface
 
 	public function ensureSessionKeyIsValid(string $key) :void {
 		if($this->isSessionKeyValid($key) === false) {
-      throw new SessionInvalidArgumentException($key, ' is not a valid session key');
+      throw new BaseInvalidArgumentException($key, ' is not a valid session key');
     }
 	}
 }

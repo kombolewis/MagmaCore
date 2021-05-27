@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Magma\LiquidOrm\DataMapper;
 
 use PDO;
+use Exception;
+use PDOStatement;
+use Magma\Base\Exception\BaseNoValueException;
 use Magma\LiquidOrm\DataMapper\DataMapperInterface;
+use Magma\Base\Exception\BaseInvalidArgumentException;
 use Magma\DatabaseConnection\DatabaseConnectionInterface;
-use Magma\LiquidOrm\DataMapper\Exception\DataMapperException;
+use Magma\Utility\Helpers;
 
 class DataMapper implements DataMapperInterface
 {
@@ -37,18 +41,19 @@ class DataMapper implements DataMapperInterface
    */
   private function isEmpty($value, string $errorMessage = null) {
     if(empty($value)) {
-      throw new DataMapperException($errorMessage);
+      throw new BaseNoValueException($errorMessage);
     }
   }
   private function isArray(array $value) {
     if(!is_array($value)) {
-      throw new DataMapperException('Argument requires type array');
+      throw new BaseInvalidArgumentException('Argument requires type array');
     }
   }
   /**
    * @inheritDoc
    */
   public function prepare(string $sqlQuery) :self {
+    Helpers::dnd($sqlQuery);
     $this->statement = $this->dbh->open()->prepare($sqlQuery);
     return $this;
 
@@ -58,11 +63,11 @@ class DataMapper implements DataMapperInterface
    * @inheritDoc
    *
    */
-  public function bind() {
+  public function bind($value) {
     try {
       switch($value){
         case \is_bool($value):
-        case intval($val):
+        case intval($value):
           $dataType = PDO::PARAM_INT;
           break;
         case \is_null($value):
@@ -73,7 +78,7 @@ class DataMapper implements DataMapperInterface
           break;
       }
       return $dataType;
-    } catch (DataMapperException $exception) {
+    } catch (Exception $exception) {
       throw $exception;
     }
   }
@@ -96,7 +101,7 @@ class DataMapper implements DataMapperInterface
    *
    * @param array $fields
    * @return PDOStatement
-   * @throws DataMapperException
+   * @throws BaseInvalidArgumentException
    */
   protected function bindValues(array $fields) :PDOStatement{
     $this->isArray($fields);
@@ -175,7 +180,7 @@ class DataMapper implements DataMapperInterface
     return (!empty($parameters) || !empty($conditions)) ? array_merge($conditions,$parameters) : $parameters ;
   }
 
-  public function persist(string $query, array $parameters) {
+  public function persist(string $sqlQuery, array $parameters) {
     try {
       return $this->prepare($sqlQuery)->bindParameters($parameters)->execute();
     } catch (\Throwable $th) {

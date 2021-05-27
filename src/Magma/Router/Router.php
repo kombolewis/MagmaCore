@@ -1,9 +1,10 @@
 <?php
 namespace Magma\Router;
 
+use Magma\Utility\Helpers;
 use Magma\Router\RouterInterface;
-use Magma\Router\Exception\RouterException;
-use Magma\Router\Exception\RouterBadMethodCallException;
+use Magma\Base\Exception\BaseException;
+use Magma\Base\Exception\BaseBadMethodCallException;
 
 class Router implements RouterInterface
 {
@@ -58,14 +59,14 @@ class Router implements RouterInterface
         if(\is_callable([$controllerObject, $action])) {
           $controllerObject->$action();
         } else {
-          throw new RouterBadMethodCallException();
+          throw new BaseBadMethodCallException('object is not callable');
         }
       } else {
-        throw new RouterException();
+        throw new BaseException('Controller class not found');
       }
 
     } else {
-      throw new RouterException;
+      throw new BaseException('Match Error');
     }
   }
 
@@ -97,7 +98,7 @@ class Router implements RouterInterface
    * @return boolean
    */
   private function match(string $url) : bool {
-
+    // Helpers::dnd($this->routes);
     foreach($this->routes as $route => $params) {
       if(\preg_match($route, $url, $matches)) {
         foreach($matches as $key => $match) {

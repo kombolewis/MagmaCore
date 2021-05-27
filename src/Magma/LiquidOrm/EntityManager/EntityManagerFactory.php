@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Magma\LiquidOrm\EntityManager;
 
+use Magma\Base\Exception\BaseException;
 use Magma\LiquidOrm\EntityManager\CrudInterface;
 use Magma\LiquidOrm\EntityManager\EntityManager;
 use Magma\LiquidOrm\DataMapper\DataMapperInterface;
 use Magma\LiquidOrm\QueryBuilder\QueryBuilderInterface;
 use Magma\LiquidOrm\EntityManager\EntityManagerInterface;
-use Magma\LiquidOrm\EntityManager\Exception\CrudException;
 
 class EntityManagerFactory
 {
@@ -26,9 +26,9 @@ class EntityManagerFactory
   }
 
   public function create(string $crudString, string $tableSchema, string $tableSchemaID, array $options = []) : EntityManagerInterface {
-    $crudObject = new $crudString($this->dataMapper, $this->queryBuilder, $tableSchema, $tableSchemaID);
+    $crudObject = new $crudString($this->dataMapper, $this->queryBuilder, $tableSchema, $tableSchemaID, $options);
     if(!$crudObject instanceof CrudInterface) {
-      throw new CrudException($crudString . 'is not a valid crud object');
+      throw new BaseException($crudString . 'is not a valid crud object');
     }
     return new EntityManager($crudObject);
   }

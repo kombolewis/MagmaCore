@@ -2,9 +2,12 @@
 
 namespace Magma\Application;
 
+use Magma\Router\Router;
+use Magma\Utility\Helpers;
+use Magma\Yaml\YamlConfig;
 use Magma\Application\Config;
 use Magma\Traits\SystemTrait;
-use Magma\Router\RouterManager;
+use Magma\Router\RouterFactory;
 
 class Application
 {
@@ -51,8 +54,25 @@ class Application
     return $this;
   }
 
-  public function setRouteHandler(string $url) :self {
-    RouterManager::dispatchRoute($url);
+  /**
+   * Undocumented function
+   *
+   * @param string $url
+   * @param array $routes
+   * @return self
+   */
+  public function setRouteHandler(string $url = null, array $routes = []) :self {
+
+    $query = $_SERVER['REQUEST_URI']; 
+    if(\strlen($query) > 1) {
+      $query = ltrim($_SERVER['REQUEST_URI'],'/');
+    }
+    
+    $url = ($url) ?? $query;
+    $routes = ($routes) ? $routes : YamlConfig::file('routes');
+    // Helpers::dnd($url);
+    $factory = new RouterFactory($url, $routes);
+    $factory->create(Router::class)->buildRoutes();
     return $this;
   }
 }

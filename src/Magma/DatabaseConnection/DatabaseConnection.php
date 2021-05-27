@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Magma\DatabaseConnection;
 
 
-use Magma\DatabaseConnection\DatabaseConnectionInterface;
-use Magma\DatabaseConnection\Exception\DatabaseConnectionException;
-
 use PDO;
+use Magma\Base\Exception\BaseException;
+
+use Magma\DatabaseConnection\DatabaseConnectionInterface;
 
 class DatabaseConnection implements DatabaseConnectionInterface
 {
@@ -42,14 +42,14 @@ class DatabaseConnection implements DatabaseConnectionInterface
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
       ];
-      $this->dbh = new PDO(
+      return $this->dbh = new PDO(
         $this->credentials['dsn'],
         $this->credentials['username'],
         $this->credentials['password'],
         $params
       );
     } catch (\Exception $exception) {
-      throw new DatabaseConnectionException($exception->getMessage(), (int)$exception->getCode());
+      throw new BaseException($exception->getMessage(), (int)$exception->getCode());
     }
   }
 

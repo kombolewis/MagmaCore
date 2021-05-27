@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Magma\LiquidOrm\QueryBuilder;
 
 use Magma\LiquidOrm\QueryBuilder\QueryBuilderInterface;
+use Magma\Base\Exception\BaseInvalidArgumentException;
+use Magma\Utility\Helpers;
 
 class QueryBuilder implements QueryBuilderInterface
 {
@@ -41,7 +43,7 @@ class QueryBuilder implements QueryBuilderInterface
 
   public function buildQuery(array $args = []) : self {
     if(count($args) < 0) {
-      throw new QueryBuilderInvalidArgumentException();
+      throw new BaseInvalidArgumentException('Too few arguments to method call.');
     }
     $arg = array_merge(self::SQL_DEFAULT,$args);
     $this->key = $arg;
@@ -77,6 +79,7 @@ class QueryBuilder implements QueryBuilderInterface
   public function updateQuery() : string {
     if($this->isQueryTypeValid('update')) {
       if(is_array($this->key['fields']) && count($this->key['fields'] > 0)) {
+        $values = '';
         foreach($this->key['fields'] as $field) {
           if($field !== $this->key['primary_key']) {
             $values .= $field . " = :" . $field . ", ";
@@ -113,14 +116,14 @@ class QueryBuilder implements QueryBuilderInterface
   }
 
   public function searchQuery() :string {
-    //
+    return '';
   }
   public function rawQuery() :string {
-    //
+    return '';
   }
 
 	private function hasConditions() {
-		if(isset($this->key['conditions']) && $this->key['conditions'] != '') {
+    if(isset($this->key['conditions']) && $this->key['conditions'] != '') {
       if(\is_array($this->key['conditions'])) {
         $sort = [];
         foreach(array_keys($this->key['conditions']) as $whereKey => $where) {
@@ -135,8 +138,8 @@ class QueryBuilder implements QueryBuilderInterface
     } else if(empty($this->key['conditions'])){
       $this->sqlQuery = " WHERE 1";
     }
-    if(isset($this->key['orderBy']) && $this->key['orderBy'] != '') {
-      $this->sqlQuery .= " ORDER BY " . $this->key['orderBy'] . " ";
+    if(isset($this->key['orderBy']) && !empty($this->key['orderBy'])) {
+      $this->sqlQuery .= " ORDER BY " . implode(' ',$this->key['orderBy']) . " ";
     }
 
     if(isset($this->key['limit']) && $this->key['offset'] != -1) {
@@ -144,6 +147,8 @@ class QueryBuilder implements QueryBuilderInterface
     }
 
     return $this->sqlQuery;
-	}
+  }
+  
+
 }
 

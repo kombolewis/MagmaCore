@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Magma\LiquidOrm\DataMapper;
 
-use Magma\LiquidOrm\DataMapper\Exception\DataMapperInvalidArgumentException;
-
-
+use Magma\Base\Exception\BaseInvalidArgumentException;
 
 class DataMapperEnvironmentConfiguration
 {
@@ -35,7 +33,6 @@ class DataMapperEnvironmentConfiguration
    */
   public function getDatabaseCredentials(string $driver) : array {
     $connectionArray = [];
-    
     $this->isCredentialsValid($driver);
 
     foreach($this->credentials as $credential) {
@@ -54,13 +51,13 @@ class DataMapperEnvironmentConfiguration
    */
   private function isCredentialsValid(string $driver) {
     if(empty($driver) && !\is_string($driver)) {
-      throw new DataMapperInvalidArgumentException('Invalid argument. This is another missing or off the invalid data type.');
+      throw new BaseInvalidArgumentException('Invalid argument. This is another missing or off the invalid data type.');
     }
     if(!is_array($this->credentials)){
-      throw new DataMapperInvalidArgumentException('Invalid credentials.');
+      throw new BaseInvalidArgumentException('Invalid credentials.');
     }
-    if(!\in_array($driver, array_keys($this->credentials[$driver]))) {
-      throw new DataMapperInvalidArgumentException('Unsupported database driver.');
+    if(!\in_array($driver, array_keys($this->credentials['driver']))) {
+      throw new BaseInvalidArgumentException('Unsupported database driver.');
     }
   }
 

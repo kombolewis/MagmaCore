@@ -20,9 +20,9 @@ class EntityManager implements EntityManagerInterface
    * @return void
    */
 
-   public function __construct(CrudInterface $crud) {
-     $this->crud = $crud;
-   }
+  public function __construct(CrudInterface $crud) {
+   $this->crud = $crud;
+  }
 
   /**
    * @inheritDoc

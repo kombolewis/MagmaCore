@@ -170,8 +170,8 @@ class Crud implements CrudInterface
       $args = ['table' => $this->getSchema(), 'type' => 'search', 'selectors' => $selectors, 'conditions' => $conditions];
       $query = $this->queryBuilder->buildQuery($args)->searchQuery ();
       $this->dataMapper->persist($query, $this->dataMapper->buildQueryParameters($conditions));
-      if($this->dataMapper->numRows() ==1) {
-        return true;
+      if($this->dataMapper->numRows() > 0) {
+        return $this->dataMapper->results();
       }
     } catch (\Throwable $th) {
       throw $th;
@@ -182,13 +182,13 @@ class Crud implements CrudInterface
    * @inheritDoc
    *
    */
-  public function  rawQuery(string $rawQuery, ?array $conditions) {
+  public function  rawQuery(string $rawQuery, ?array $conditions = []) {
     try {
       $args = ['table' => $this->getSchema(), 'type' => 'raw', 'raw' => $rawQuery, 'conditions' => $conditions];
       $query = $this->queryBuilder->buildQuery($args)->rawQuery();
       $this->dataMapper->persist($query, $this->dataMapper->buildQueryParameters($conditions));
       if($this->dataMapper->numRows()) {
-        
+
       }
 
     } catch (\Throwable $th) {

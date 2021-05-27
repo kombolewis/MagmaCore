@@ -2,7 +2,6 @@
 
 namespace Magma\Yaml;
 
-use Magma\Yaml\YamlConfig;
 use Symfony\Component\Yaml\Yaml;
 use Magma\Base\Exception\BaseException;
 

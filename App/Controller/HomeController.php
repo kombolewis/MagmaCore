@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Model\UserModel;
+use Magma\Utility\Helpers;
 use Magma\Base\BaseController;
 
 class HomeController extends BaseController
@@ -11,7 +13,9 @@ class HomeController extends BaseController
   }
 
   public function indexAction() {
-    echo 'index <br>';
+    $user = new UserModel;
+    $data = $user->getRepo()->findAll();
+    Helpers::dnd($data);
   }
 
   protected function before() {

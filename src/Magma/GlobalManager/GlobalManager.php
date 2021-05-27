@@ -2,8 +2,9 @@
 
 namespace Magma\GlobalManager;
 
+use Magma\Base\Exception\BaseException;
 use Magma\GlobalManager\GlobalManagerInterface;
-use Magma\GlobalManager\Exception\GlobalManagerException;
+use Magma\Base\Exception\BaseInvalidArgumentException;
 
 class GlobalManager implements GlobalManagerInterface
 {
@@ -31,7 +32,7 @@ class GlobalManager implements GlobalManagerInterface
     try {
       return $GLOBALS[$key];
     } catch (\Throwable $th) {
-      throw new GlobalManagerException('an exception was thrown trying to retrieve the data');
+      throw new BaseException('an exception was thrown trying to retrieve the data');
     }
   }
 
@@ -44,11 +45,11 @@ class GlobalManager implements GlobalManagerInterface
   private static function isGlobalValid(string $key) :void {
 
     if(!isset($GLOBALS[$key])) {
-      throw new GlobalManagerInvalidArgumentException('Invalid global key. Please ensure you have set '.$key.' before accessing it');
+      throw new BaseInvalidArgumentException('Invalid global key. Please ensure you have set '.$key.' before accessing it');
     }
 
     if(empty($key)) {
-      throw new GlobalManagerInvalidArgumentException('Argument cannot be empty');
+      throw new BaseInvalidArgumentException('Argument cannot be empty');
     }
   }
 }
