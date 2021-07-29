@@ -4,41 +4,19 @@ declare(strict_types=1);
 
 namespace Magma\LiquidOrm\QueryBuilder;
 
-use Magma\LiquidOrm\QueryBuilder\QueryBuilderInterface;
 use Magma\Base\Exception\BaseInvalidArgumentException;
-use Magma\Utility\Helpers;
+use Magma\LiquidOrm\QueryBuilder\AbstractQueryBuilder;
 
-class QueryBuilder implements QueryBuilderInterface
+class QueryBuilder extends AbstractQueryBuilder
 {
-  protected array $key;
 
-  protected string $sqlQuery;
-
-  protected const SQL_DEFAULT = [
-    'conditions' => [],
-    'selectors' => [],
-    'replace' => false,
-    'distinct' => false,
-    'from' => [],
-    'and' => [],
-    'or' => [],
-    'orderBy' => [],
-    'fields' => [],
-    'primary_key' => '',
-    'table' => '',
-    'type' => '',
-    'raw' => '',
-  ];
-
-
-  protected const QUERY_TYPES = ['insert','select','update','delete','raw','search'];
   /**
    * main class constructor
    * 
    * @return void
    */
   public function __construct() {
-
+    parent::__construct();
   }
 
   public function buildQuery(array $args = []) : self {
@@ -48,11 +26,6 @@ class QueryBuilder implements QueryBuilderInterface
     $arg = array_merge(self::SQL_DEFAULT,$args);
     $this->key = $arg;
     return $this;
-  }
-
-  private function isQueryTypeValid(string $type) : bool {
-    if(\in_array($type, self::QUERY_TYPES)) return true;
-    return false;
   }
 
   public function insertQuery() :string {
@@ -70,7 +43,12 @@ class QueryBuilder implements QueryBuilderInterface
   public function selectQuery() : string {
     if($this->isQueryTypeValid('select')) {
       $selectors = (!empty($this->key['selectors'])) ? implode(", ", $this->key['selectors']) : "*";
-      $this->sqlQuery = "SELECT {$selectors} from {$this->key['table']}";
+
+      if(isset($this->key['aggregate']) && $this->key['aggregate']) {
+        $this->sqlQuery = "SELECT {$this->key['aggregate']}({$this->key['aggregate_field']}) FROM {$this->key['table']}";
+      } else {
+        $this->sqlQuery = "SELECT {$selectors}  FROM {$this->key['table']}";
+      }
     }
     $this->sqlQuery = $this->hasConditions();
     return $this->sqlQuery;
@@ -126,26 +104,21 @@ class QueryBuilder implements QueryBuilderInterface
     if(isset($this->key['conditions']) && $this->key['conditions'] != '') {
       if(\is_array($this->key['conditions'])) {
         $sort = [];
-        foreach(array_keys($this->key['conditions']) as $whereKey => $where) {
+        foreach(array_keys($this->key['conditions']) as $where) {
           if(isset($where) && $where != '') {
             $sort[] = $where . " = :" . $where;
           }
         }
         if(count($this->key['conditions']) > 0) {
-          $this->sqlQuery .= "WHERE " . implode(" AND ", $sort);
+          $this->sqlQuery .= " WHERE " . implode(" AND ", $sort);
         }
       }
     } else if(empty($this->key['conditions'])){
       $this->sqlQuery = " WHERE 1";
     }
-    if(isset($this->key['orderBy']) && !empty($this->key['orderBy'])) {
-      $this->sqlQuery .= " ORDER BY " . implode(' ',$this->key['orderBy']) . " ";
-    }
 
-    if(isset($this->key['limit']) && $this->key['offset'] != -1) {
-      $this->sqlQuery .= " LIMIT :offset, :limit";
-    }
-
+    $this->sqlQuery .= $this->orderByQuery();
+    $this->sqlQuery .= $this->queryOffset();
     return $this->sqlQuery;
   }
   

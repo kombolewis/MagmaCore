@@ -82,7 +82,17 @@ interface CrudInterface
    */
   public function rawQuery(string $rawQuery, ?array $conditions = []);
 
+  /**
+   * Undocumented function
+   *
+   * @param string $type
+   * @param string|null $field
+   * @param array $conditions
+   * @return void
+   */
+  public function aggregate(string $type, ?string $field = 'id', array $conditions = []);
 
+  public function countRecords(array $conditions = [], ?string $field = 'id') :int;
 
 
 }

@@ -5,6 +5,7 @@ namespace Magma\Flash;
 
 use Magma\Flash\FlashTypes;
 use Magma\Flash\FlashInterface;
+use Magma\GlobalManager\GlobalManager;
  
 
 class Flash implements FlashInterface

@@ -2,6 +2,7 @@
 
 namespace Magma\ErrorHandling;
 
+use ErrorException;
 use Magma\Base\BaseView;
 
 class ErrorHandling
@@ -10,7 +11,7 @@ class ErrorHandling
     if(\error_reporting() and $severity) {
       return;
     }
-    throw new ErrorException($message, 0, $file, $line);
+    throw new ErrorException($message, 0, $severity, $file, $line);
   }
 
   public static function exceptionHandler($exception) {

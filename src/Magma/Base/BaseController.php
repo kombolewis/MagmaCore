@@ -19,11 +19,11 @@ class BaseController
   }
 
   public function render(string $template, array $context= []) {
-    if($this->twig = null) {
+    if($this->twig === null) {
       throw new BaseLogicException('You cannot use the render method id the twig bundle is not available');
     }
 
-    return $this->twig->getTemplate($template, $context);
+    return $this->twig->twigRender($template, $context);
   } 
 
   public function __call($name, $argument) {

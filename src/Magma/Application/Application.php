@@ -3,7 +3,6 @@
 namespace Magma\Application;
 
 use Magma\Router\Router;
-use Magma\Utility\Helpers;
 use Magma\Yaml\YamlConfig;
 use Magma\Application\Config;
 use Magma\Traits\SystemTrait;
@@ -35,7 +34,7 @@ class Application
     defined('DS')  or define('DS', DIRECTORY_SEPARATOR);
     defined('APP_ROOT') or define('APP_ROOT', $this->appRoot);
     defined('CONFIG_PATH') or define('CONFIG_PATH', APP_ROOT . DS . 'Config');
-    defined('TEMPLATE_PATH') or define('TEMPLATE_PATH', APP_ROOT . DS . 'App' . DS . 'templates');
+    defined('TEMPLATE_PATH') or define('TEMPLATE_PATH', APP_ROOT . DS . 'App' . DS);
     defined('LOG_DIR') or define('LOG_DIR', APP_ROOT . DS . 'tmp' . DS .'log');
 	}
 
@@ -70,7 +69,6 @@ class Application
     
     $url = ($url) ?? $query;
     $routes = ($routes) ? $routes : YamlConfig::file('routes');
-    // Helpers::dnd($url);
     $factory = new RouterFactory($url, $routes);
     $factory->create(Router::class)->buildRoutes();
     return $this;

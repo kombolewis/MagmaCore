@@ -7,6 +7,7 @@ namespace Magma\LiquidOrm\EntityManager;
 use Magma\LiquidOrm\DataMapper\DataMapper;
 use Magma\LiquidOrm\QueryBuilder\QueryBuilder;
 use Magma\LiquidOrm\EntityManager\CrudInterface;
+use Magma\Utility\Helpers;
 
 class Crud implements CrudInterface
 {
@@ -104,7 +105,7 @@ class Crud implements CrudInterface
       $args = [
         'table' => $this->getSchema(), 
         'type' => 'select', 
-        'select' => $selectors,
+        'selectors' => $selectors,
         'conditions' => $conditions,
         'params' => $parameters,
         'extras' => $optional
@@ -195,6 +196,44 @@ class Crud implements CrudInterface
       throw $th;
     }
   }
+
+  /**
+   * Undocumented function
+   *
+   * @param string $type
+   * @param string|null $field
+   * @param array $conditions
+   * @return mixed
+   */
+  public function aggregate(string $type, ?string $field = 'id', array $conditions = []) {
+    $args = [
+      'table' => $this->getSchema(),
+      'primary_key' => $this->getSchemaID(),
+      'type' => 'select',
+      'aggregate' =>  $type,
+      'aggregate_field' => $field,
+      'conditions' =>  $conditions
+    ];
+    $query = $this->queryBuilder->buildQuery($args)->selectQuery();
+    $this->dataMapper->persist($query, $this->dataMapper->buildQueryParameters($conditions));
+    if($this->dataMapper->numRows() > 0) return $this->dataMapper->column();
+  }
+
+  /**
+   * Returns total number of records based on the method arguments
+   *
+   * @param array $conditions
+   * @param string|null $field
+   * @return integer
+   */
+  public function countRecords(array $conditions = [], ?string $field = 'id'): int {
+    if($this->getSchemaID() != '') {
+      return empty($conditions) ? $this->aggregate('count', $this->getSchemaID()) : $this->aggregate('count', $this->getSchemaID(), $conditions);
+
+    }
+    
+  }
+
   
 }
 

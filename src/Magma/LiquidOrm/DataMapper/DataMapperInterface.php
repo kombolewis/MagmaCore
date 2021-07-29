@@ -68,5 +68,12 @@ interface DataMapperInterface
    */
   public function getLastId() :int;
 
+  /**
+   * returns database column
+   *
+   * @return mixed
+   */
+  public function column();
+
 }
 

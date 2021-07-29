@@ -53,7 +53,6 @@ class DataMapper implements DataMapperInterface
    * @inheritDoc
    */
   public function prepare(string $sqlQuery) :self {
-    Helpers::dnd($sqlQuery);
     $this->statement = $this->dbh->open()->prepare($sqlQuery);
     return $this;
 
@@ -106,7 +105,7 @@ class DataMapper implements DataMapperInterface
   protected function bindValues(array $fields) :PDOStatement{
     $this->isArray($fields);
     foreach($fields as $key => $value) {
-      $this->statement->bindValue(':', $key, $value, $this->bind($value));
+      $this->statement->bindValue(':' . $key, $value, $this->bind($value));
     }
     return $this->statement;
 
@@ -121,7 +120,7 @@ class DataMapper implements DataMapperInterface
   protected function bindSearchValues(array $fields) {
     $this->isArray($fields);
     foreach($fields as $key => $value) {
-      $this->statement->bindValue(':', $key, '%' . $value . '%', $this->bind($value));
+      $this->statement->bindValue(':' . $key, '%' . $value . '%', $this->bind($value));
     }
     return $this->statement;
 
@@ -186,6 +185,14 @@ class DataMapper implements DataMapperInterface
     } catch (\Throwable $th) {
       throw $th;
     }
+  }
+
+  /**
+   * @inheritDoc
+   *
+   */
+  public function column() {
+    if($this->statement) return $this->statement->fetchColumn();
   }
 }
 

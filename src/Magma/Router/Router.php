@@ -13,7 +13,7 @@ class Router implements RouterInterface
    * 
    * @var array
    */
-  protected array $routes;
+  protected array $routes = [];
 
   /**
    * returns an array of route parameters
@@ -46,6 +46,7 @@ class Router implements RouterInterface
    * @return void
    */
   public function dispatch(string $url) : void {
+    $url = $this->formatQueryString($url);
     if($this->match($url)) {
       $controllerString = $this->params['controller'] . '-' . $this->controllerSuffix;
       $controllerString = $this->transformUpperCamelCase($controllerString);
@@ -59,14 +60,14 @@ class Router implements RouterInterface
         if(\is_callable([$controllerObject, $action])) {
           $controllerObject->$action();
         } else {
-          throw new BaseBadMethodCallException('object is not callable');
+          throw new BaseBadMethodCallException('Invalid Method');
         }
       } else {
-        throw new BaseException('Controller class not found');
+        throw new BaseException('Controller class does not exist');
       }
 
     } else {
-      throw new BaseException('Match Error');
+      throw new BaseException('404 Error no page found');
     }
   }
 
@@ -98,7 +99,6 @@ class Router implements RouterInterface
    * @return boolean
    */
   private function match(string $url) : bool {
-    // Helpers::dnd($this->routes);
     foreach($this->routes as $route => $params) {
       if(\preg_match($route, $url, $matches)) {
         foreach($matches as $key => $match) {
@@ -126,6 +126,18 @@ class Router implements RouterInterface
       $namespace .= $this->params['namespace'] .'\\';
     }
     return $namespace;
+  }
+
+  public function formatQueryString(string $url) {
+    if($url != '') {
+      $parts = explode('&', $url, 2);
+      if(strpos($parts[0], '=') === false) {
+        $url = $parts[0];
+      }else {
+        $url = '';
+      }
+    }
+    return rtrim($url, '/');
   }
 
 }

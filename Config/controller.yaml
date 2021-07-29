@@ -1,0 +1,11 @@
+user:
+  additional_conditions: []
+  selectors: []
+  records_per_page: 5
+  query: status
+  filter_by: ['lname']
+  filter_alias: 'search'
+  sort_columns: 
+    - fname
+    - created_at
+    - updated_at

@@ -22,7 +22,7 @@ interface DataRepositoryInterface
 
   public function findByIdAndUpdate(array $fields, int $id) :bool;
   
-  public function findWithSearchAndPaging(array $args, object $request) : array;
+  public function findWithSearchAndPaging(object $request, array $args) : array;
 
   public function findAndReturn(int $id, array $selectors) : self;
 
